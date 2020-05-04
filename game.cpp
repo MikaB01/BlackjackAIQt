@@ -20,6 +20,12 @@ void Game::setDealer(Dealer *value)
     dealer = value;
 }
 
+void Game::fillAiPool(int amount)
+{
+    for(int i = 0; i < amount; i++)
+        aiPool.append( new Ai() );
+}
+
 void Game::fillCardDeck()
 {
     for( int i = 0; i < 10; i++ )
@@ -47,21 +53,15 @@ void Game::swapTwoCards(Card *c1, Card *c2)
 
 void Game::firstDeal()
 {
-    /*foreach ( Ai *a, aiPool ){
-        a->addHandCard( cardDeck.pop_back() );
-    }*/
+    foreach ( Someone *someone, Someone::getAllSomeone() )
+        for( int i = 0; i < 2; i++ )
+            dealCardToSomeone( cardDeck.last(), someone );
+}
 
-    foreach ( Ai *a, aiPool ){
-        for( int i = 0; i < 2; i++ ) {
-            a->addHandCard( cardDeck.last() );
-            cardDeck.removeAt( cardDeck.indexOf(cardDeck.last()) );
-        }
-    }
-
-    for( int i = 0; i < 2; i++ ) {
-        dealer->addHandCard( cardDeck.last() );
-        cardDeck.removeAt( cardDeck.indexOf(cardDeck.last()) );
-    }
+void Game::dealCardToSomeone(Card *card, Someone *someone)
+{
+    someone->addHandCard( card );
+    cardDeck.removeAt( cardDeck.indexOf( card ) );
 }
 
 void Game::debugCardDeck()
@@ -76,18 +76,18 @@ Game::Game(QObject *parent)
 {
     srand (time(NULL));
 
-    aiPool << new Ai() << new Ai();
-
+    fillAiPool( 4 );
     fillCardDeck();
     debugCardDeck();
     suffelDeck();
     debugCardDeck();
     firstDeal();
     debugCardDeck();
-    foreach ( Ai *a, aiPool ){
+    Someone::debugAllSomeones();
+    /*foreach ( Ai *a, aiPool ){
         a->debugHandCrads();
     }
-    dealer->debugHandCrads();
+    dealer->debugHandCrads();*/
 }
 
 Game::~Game()

@@ -20,10 +20,12 @@ private:
     QList<Card*> cardDeck;
     Dealer *dealer = new Dealer();
 
+    void fillAiPool( int amount );
     void fillCardDeck();
     void suffelDeck();
     void swapTwoCards(Card *c1, Card *c2 );
     void firstDeal();
+    void dealCardToSomeone( Card *card, Someone *someone );
 
 public:
     Game( QObject *parent = 0 );

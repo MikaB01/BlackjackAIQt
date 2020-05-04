@@ -12,7 +12,7 @@ void Dealer::setIsCardHidden(bool value)
 
 Dealer::Dealer()
 {
-
+    Someone::setIsDealer(true);
 }
 
 Dealer::Dealer( QList<Card*> handCards ) : Someone(handCards)
