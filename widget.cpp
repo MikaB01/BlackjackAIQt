@@ -5,6 +5,9 @@ Widget *Widget::widget = nullptr;
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
+    createAiSelectorButton();
+    connect( swipeSelectedAiRight, &QPushButton::clicked, this, &Widget::selectNextAi );
+    connect( swipeSelectedAiLeft, &QPushButton::clicked, this, &Widget::selectPreviousAi );
     g = new Game();
 }
 
@@ -85,11 +88,22 @@ void Widget::drawPlayerBalance(QPainter *painter, Ai *ai)
     painter->drawRect( QRect( 360-((280.0/1000.0)*ai->getBalance()-280)/2, 410, (280.0/1000.0)*ai->getBalance(), 8));
 }
 
+void Widget::createAiSelectorButton()
+{
+    swipeSelectedAiRight = new QPushButton(this);
+    swipeSelectedAiRight->setGeometry( 640, 370, 18, 30 );
+    swipeSelectedAiRight->setText(">");
+
+    swipeSelectedAiLeft = new QPushButton(this);
+    swipeSelectedAiLeft->setGeometry( 340, 370, 18, 30 );
+    swipeSelectedAiLeft->setText("<");
+}
+
 void Widget::paintEvent(QPaintEvent *event)
 {
     QPainter *painter = new QPainter(this);
     drawDealerHand(painter);
-    drawPlayerHand(painter, g->getAiPool()[0]);
+    drawPlayerHand(painter, g->getAiPool()[selectedAiIndex]);
 }
 
 Widget::~Widget()
@@ -102,4 +116,22 @@ Widget *Widget::get()
     if( !widget )
         widget = new Widget();
     return widget;
+}
+
+Widget::selectNextAi()
+{
+    if( selectedAiIndex+1 < g->getAiPool().length() )
+        selectedAiIndex++;
+    else
+        selectedAiIndex = 0;
+    update();
+}
+
+Widget::selectPreviousAi()
+{
+    if( selectedAiIndex-1 >= 0 )
+        selectedAiIndex--;
+    else
+        selectedAiIndex = g->getAiPool().length()-1;
+    update();
 }
