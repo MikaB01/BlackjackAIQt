@@ -10,6 +10,7 @@ class Ai : public Someone
 {
 private:
     int balance = 1000;
+    static QList<Ai*> allAis;
 
 public:
     Ai();
@@ -17,6 +18,8 @@ public:
     Ai( int balance, QList<Card*> handCards );
     int getBalance() const;
     void setBalance(int value);
+
+    static QList<Ai *> getAllAis();
 };
 
 #endif // AI_H

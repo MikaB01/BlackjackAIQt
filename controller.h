@@ -11,11 +11,14 @@ class Controller : public QObject
 private:
     static Controller *controller;
     Widget *w;
-    //Game   *g;
+    Game   *g;
     Controller( QObject *parent = 0 );
 
 public:
     static Controller *get();
+
+public slots:
+    void hitCard();
 };
 
 #endif // CONTROLLER_H

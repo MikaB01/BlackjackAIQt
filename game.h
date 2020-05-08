@@ -25,7 +25,6 @@ private:
     void suffelDeck();
     void swapTwoCards(Card *c1, Card *c2 );
     void firstDeal();
-    void dealCardToSomeone( Card *card, Someone *someone );
 
 public:
     Game( QObject *parent = 0 );
@@ -36,6 +35,11 @@ public:
     void setAiPool(const QList<Ai *> &value);
     Dealer *getDealer() const;
     void setDealer(Dealer *value);
+    void dealCardToSomeone( Someone *someone );
+    void dealCardToSomeone( Card *card, Someone *someone );
+
+public slots:
+    void hitCard();
 };
 
 #endif // GAME_H

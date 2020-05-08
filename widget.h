@@ -6,6 +6,7 @@
 
 #include "config.h"
 #include "game.h"
+#include "ai.h"
 
 class Widget : public QWidget
 {
@@ -14,11 +15,10 @@ class Widget : public QWidget
 private:
     static Widget *widget;
     Widget(QWidget *parent = 0);
-    Game   *g;
-    int selectedAiIndex = 0;
 
     QPushButton *swipeSelectedAiRight;
     QPushButton *swipeSelectedAiLeft;
+    QPushButton *hit;
 
     void drawCard( QPainter *painter , QRect rect, Card *card );
     void drawDealerHand( QPainter *painter );
@@ -27,6 +27,7 @@ private:
     void drawCradSum( QPainter *painter, Someone *someone, QRect rect );
     void drawPlayerBalance( QPainter *painter, Ai *ai );
     void createAiSelectorButton();
+    void createGameButtons();
 
 protected:
     void paintEvent( QPaintEvent *event );
@@ -35,9 +36,15 @@ public:
     ~Widget();
     static Widget *get();
 
+    int selectedAiIndex = 0;
+    int activeTableIndex = 0;
+
 public slots:
-    selectNextAi();
-    selectPreviousAi();
+    void selectNextAi();
+    void selectPreviousAi();
+
+signals:
+    void hitPressed();
 };
 
 #endif // WIDGET_H

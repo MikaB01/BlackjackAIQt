@@ -6,9 +6,11 @@ Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
     createAiSelectorButton();
+    createGameButtons();
+
     connect( swipeSelectedAiRight, &QPushButton::clicked, this, &Widget::selectNextAi );
     connect( swipeSelectedAiLeft, &QPushButton::clicked, this, &Widget::selectPreviousAi );
-    g = new Game();
+    connect( hit, &QPushButton::clicked, this, &Widget::hitPressed );
 }
 
 void Widget::drawCard(QPainter *painter, QRect rect, Card *card)
@@ -28,32 +30,32 @@ void Widget::drawCard(QPainter *painter, QRect rect, Card *card)
 
 void Widget::drawDealerHand(QPainter *painter)
 {
-    int dealerSize = g->getDealer()->getHandCards().length();
+    int dealerSize = Dealer::getAllDealers()[activeTableIndex]->getHandCards().length();
     if ( dealerSize > 6 ) return;
 
     for( int i = 0; i < dealerSize; i++ )
         drawCard(painter, QRect( DEALER_CARD_START_POSITIONS[dealerSize-2].x()+i*(CARD_SIZE.width()+MARGIN),
                                  DEALER_CARD_START_POSITIONS[dealerSize-2].y(),
                                  CARD_SIZE.width(), CARD_SIZE.height() ),
-                g->getDealer()->getHandCards()[i] );
-    if( g->getDealer()->getIsCardHidden() )
+                Dealer::getAllDealers()[activeTableIndex]->getHandCards()[i] );
+    if( Dealer::getAllDealers()[activeTableIndex]->getIsCardHidden() )
         painter->drawRect(QRect( DEALER_CARD_START_POSITIONS[dealerSize-2].x()+1*(CARD_SIZE.width()+MARGIN),
                                           DEALER_CARD_START_POSITIONS[dealerSize-2].y(),
                                           CARD_SIZE.width(), CARD_SIZE.height() ));
     else
-        drawCradSum( painter, g->getDealer(), QRect( 450, 230, 100, 50) );
+        drawCradSum( painter, Dealer::getAllDealers()[activeTableIndex], QRect( 450, 230, 100, 50) );
 }
 
 void Widget::drawPlayerHand(QPainter *painter, Ai *ai)
 {
-    int handSize = ai->getHandCards().length();
+    int handSize = Ai::getAllAis()[selectedAiIndex]->getHandCards().length();
     if ( handSize > 6 ) return;
 
     for( int i = 0; i < handSize; i++ )
         drawCard(painter, QRect( PLAYER_CARD_START_POSITIONS[handSize-2].x()+i*(CARD_SIZE.width()+MARGIN),
                                  PLAYER_CARD_START_POSITIONS[handSize-2].y(),
                                  CARD_SIZE.width(), CARD_SIZE.height() ),
-                ai->getHandCards()[i] );
+                Ai::getAllAis()[selectedAiIndex]->getHandCards()[i] );
     drawCradSum( painter, ai, QRect( 450, 630, 100, 50) );
     drawPlayerBalance( painter, ai );
 }
@@ -68,42 +70,59 @@ void Widget::drawCardSymbole(QPainter *painter, QRect rect, Card *card )
 void Widget::drawCradSum(QPainter *painter, Someone *someone, QRect rect )
 {
     QFont font = QFont("Monospace", 24);
-    painter->setFont(font);
+    QPen pen = QPen(Qt::SolidLine);
+    if( someone->getHandCardSum() > 21 )
+        pen.setColor( Qt::red );
+    else if( someone->getHandCardSum() == 21 )
+        pen.setColor( Qt::green );
+    else pen.setColor( Qt::black );
+    painter->setPen( pen );
+    painter->setFont( font );
     painter->drawText( rect, "[ " + QString::number(someone->getHandCardSum()) + " ]", QTextOption(Qt::AlignCenter) );
+    pen.setColor( Qt::black );
+    painter->setPen( pen );
 }
 
 void Widget::drawPlayerBalance(QPainter *painter, Ai *ai)
 {
     QBrush brush = QBrush(Qt::SolidPattern);
-    if(ai->getBalance() > 500)
+    int aiBalance = Ai::getAllAis()[selectedAiIndex]->getBalance();
+    if(aiBalance > 500)
         brush.setColor( Qt::green );
-    else if( ai->getBalance() > 200 )
+    else if( aiBalance > 200 )
         brush.setColor( QColor(247, 198, 20, 255));
     else
         brush.setColor( Qt::red );
     painter->setBrush(brush);
     QFont font = QFont("Monospace", 18);
     painter->setFont(font);
-    painter->drawText( QRect( 450, 360, 100, 50), "$ " + QString::number(ai->getBalance()) + " $", QTextOption(Qt::AlignCenter) );
-    painter->drawRect( QRect( 360-((280.0/1000.0)*ai->getBalance()-280)/2, 410, (280.0/1000.0)*ai->getBalance(), 8));
+    painter->drawText( QRect( 450, 360, 100, 50), "$ " + QString::number(aiBalance) + " $", QTextOption(Qt::AlignCenter) );
+    painter->drawRect( QRect( 360-((280.0/1000.0)*aiBalance-280)/2, 410, (280.0/1000.0)*aiBalance, 8));
 }
 
 void Widget::createAiSelectorButton()
 {
-    swipeSelectedAiRight = new QPushButton(this);
-    swipeSelectedAiRight->setGeometry( 640, 370, 18, 30 );
-    swipeSelectedAiRight->setText(">");
-
     swipeSelectedAiLeft = new QPushButton(this);
     swipeSelectedAiLeft->setGeometry( 340, 370, 18, 30 );
     swipeSelectedAiLeft->setText("<");
+
+    swipeSelectedAiRight = new QPushButton(this);
+    swipeSelectedAiRight->setGeometry( 640, 370, 18, 30 );
+    swipeSelectedAiRight->setText(">");
+}
+
+void Widget::createGameButtons()
+{
+    hit = new QPushButton(this);
+    hit->setGeometry( 570, 635, 70, 40 );
+    hit->setStyleSheet("border-image:url(hit.png);");
 }
 
 void Widget::paintEvent(QPaintEvent *event)
 {
     QPainter *painter = new QPainter(this);
     drawDealerHand(painter);
-    drawPlayerHand(painter, g->getAiPool()[selectedAiIndex]);
+    drawPlayerHand(painter, Ai::getAllAis()[selectedAiIndex]);
 }
 
 Widget::~Widget()
@@ -118,20 +137,20 @@ Widget *Widget::get()
     return widget;
 }
 
-Widget::selectNextAi()
+void Widget::selectNextAi()
 {
-    if( selectedAiIndex+1 < g->getAiPool().length() )
+    if( selectedAiIndex+1 < Ai::getAllAis().length() )
         selectedAiIndex++;
     else
         selectedAiIndex = 0;
     update();
 }
 
-Widget::selectPreviousAi()
+void Widget::selectPreviousAi()
 {
     if( selectedAiIndex-1 >= 0 )
         selectedAiIndex--;
     else
-        selectedAiIndex = g->getAiPool().length()-1;
+        selectedAiIndex = Ai::getAllAis().length()-1;
     update();
 }

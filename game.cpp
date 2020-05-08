@@ -20,6 +20,12 @@ void Game::setDealer(Dealer *value)
     dealer = value;
 }
 
+void Game::dealCardToSomeone(Someone *someone)
+{
+    someone->addHandCard( cardDeck.last() );
+    cardDeck.removeAt( cardDeck.indexOf( cardDeck.last() ) );
+}
+
 void Game::fillAiPool(int amount)
 {
     for(int i = 0; i < amount; i++)
@@ -64,6 +70,11 @@ void Game::dealCardToSomeone(Card *card, Someone *someone)
     cardDeck.removeAt( cardDeck.indexOf( card ) );
 }
 
+void Game::hitCard()
+{
+
+}
+
 void Game::debugCardDeck()
 {
     qDebug() << "---Debug-CardDeck--- (" << cardDeck.length() << ")";
@@ -84,10 +95,6 @@ Game::Game(QObject *parent)
     firstDeal();
     debugCardDeck();
     Someone::debugAllSomeones();
-    /*foreach ( Ai *a, aiPool ){
-        a->debugHandCrads();
-    }
-    dealer->debugHandCrads();*/
 }
 
 Game::~Game()
