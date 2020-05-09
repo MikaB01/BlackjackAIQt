@@ -19,6 +19,7 @@ public:
 
 public slots:
     void hitCard();
+    void stand();
 };
 
 #endif // CONTROLLER_H

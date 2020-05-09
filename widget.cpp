@@ -11,6 +11,7 @@ Widget::Widget(QWidget *parent)
     connect( swipeSelectedAiRight, &QPushButton::clicked, this, &Widget::selectNextAi );
     connect( swipeSelectedAiLeft, &QPushButton::clicked, this, &Widget::selectPreviousAi );
     connect( hit, &QPushButton::clicked, this, &Widget::hitPressed );
+    connect( stand, &QPushButton::clicked, this, &Widget::standPressed );
 }
 
 void Widget::drawCard(QPainter *painter, QRect rect, Card *card)
@@ -116,6 +117,10 @@ void Widget::createGameButtons()
     hit = new QPushButton(this);
     hit->setGeometry( 570, 635, 70, 40 );
     hit->setStyleSheet("border-image:url(hit.png);");
+
+    stand = new QPushButton(this);
+    stand->setGeometry( 360, 635, 70, 40 );
+    stand->setStyleSheet("border-image:url(stand.png);");
 }
 
 void Widget::paintEvent(QPaintEvent *event)
@@ -137,12 +142,19 @@ Widget *Widget::get()
     return widget;
 }
 
+void Widget::setGameButtonStatus(bool status)
+{
+    hit->setVisible( status );
+    stand->setVisible( status );
+}
+
 void Widget::selectNextAi()
 {
     if( selectedAiIndex+1 < Ai::getAllAis().length() )
         selectedAiIndex++;
     else
         selectedAiIndex = 0;
+    setGameButtonStatus( !Ai::getAllAis()[selectedAiIndex]->getIsStand() );
     update();
 }
 
@@ -152,5 +164,6 @@ void Widget::selectPreviousAi()
         selectedAiIndex--;
     else
         selectedAiIndex = Ai::getAllAis().length()-1;
+    setGameButtonStatus( !Ai::getAllAis()[selectedAiIndex]->getIsStand() );
     update();
 }

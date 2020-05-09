@@ -12,6 +12,7 @@ private:
 protected:
     QList<Card*> handCards;
     bool isDealer = false;
+    bool isStand = false;
     static QList<Someone*> allSomeone;
 
 public:
@@ -31,6 +32,8 @@ public:
     static QList<Someone *> getAllSomeone();
     static void debugSomeone(Someone *someone );
     static void debugAllSomeones();
+    bool getIsStand() const;
+    void setIsStand(bool value);
 };
 
 #endif // SOMEONE_H

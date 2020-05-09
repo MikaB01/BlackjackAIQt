@@ -19,6 +19,7 @@ private:
     QPushButton *swipeSelectedAiRight;
     QPushButton *swipeSelectedAiLeft;
     QPushButton *hit;
+    QPushButton *stand;
 
     void drawCard( QPainter *painter , QRect rect, Card *card );
     void drawDealerHand( QPainter *painter );
@@ -39,12 +40,15 @@ public:
     int selectedAiIndex = 0;
     int activeTableIndex = 0;
 
+    void setGameButtonStatus( bool status );
+
 public slots:
     void selectNextAi();
     void selectPreviousAi();
 
 signals:
     void hitPressed();
+    void standPressed();
 };
 
 #endif // WIDGET_H

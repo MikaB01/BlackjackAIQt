@@ -53,6 +53,16 @@ void Someone::setIsDealer(bool isDealer)
     this->isDealer = isDealer;
 }
 
+bool Someone::getIsStand() const
+{
+    return isStand;
+}
+
+void Someone::setIsStand(bool value)
+{
+    isStand = value;
+}
+
 Someone::Someone()
 {
     allSomeone.append( this );

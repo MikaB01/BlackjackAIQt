@@ -11,6 +11,7 @@ Controller::Controller(QObject *parent)
     w->show();
 
     connect( w, &Widget::hitPressed, this, &Controller::hitCard );
+    connect( w, &Widget::standPressed, this, &Controller::stand );
 }
 
 Controller *Controller::get()
@@ -23,5 +24,12 @@ Controller *Controller::get()
 void Controller::hitCard()
 {
     g->dealCardToSomeone( g->getAiPool()[w->selectedAiIndex] );
+    w->update();
+}
+
+void Controller::stand()
+{
+    g->getAiPool()[w->selectedAiIndex]->setIsStand( true );
+    w->setGameButtonStatus( false );
     w->update();
 }
