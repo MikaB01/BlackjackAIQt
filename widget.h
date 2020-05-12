@@ -37,7 +37,6 @@ public:
     ~Widget();
     static Widget *get();
 
-    int selectedAiIndex = 0;
     int activeTableIndex = 0;
 
     void setGameButtonStatus( bool status );

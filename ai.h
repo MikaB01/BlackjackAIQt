@@ -11,6 +11,7 @@ class Ai : public Someone
 private:
     int balance = 1000;
     static QList<Ai*> allAis;
+    static int selectedAiIndex;
 
 public:
     Ai();
@@ -20,6 +21,8 @@ public:
     void setBalance(int value);
 
     static QList<Ai *> getAllAis();
+    static int getSelectedAiIndex();
+    static void setSelectedAiIndex(int index);
 };
 
 #endif // AI_H

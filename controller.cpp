@@ -23,13 +23,13 @@ Controller *Controller::get()
 
 void Controller::hitCard()
 {
-    g->dealCardToSomeone( g->getAiPool()[w->selectedAiIndex] );
+    g->dealCardToSomeone( g->getAiPool()[Ai::getSelectedAiIndex()] );
     w->update();
 }
 
 void Controller::stand()
 {
-    g->getAiPool()[w->selectedAiIndex]->setIsStand( true );
+    g->getAiPool()[Ai::getSelectedAiIndex()]->setIsStand( true );
     w->setGameButtonStatus( false );
     w->update();
 }

@@ -49,14 +49,14 @@ void Widget::drawDealerHand(QPainter *painter)
 
 void Widget::drawPlayerHand(QPainter *painter, Ai *ai)
 {
-    int handSize = Ai::getAllAis()[selectedAiIndex]->getHandCards().length();
+    int handSize = Ai::getAllAis()[Ai::getSelectedAiIndex()]->getHandCards().length();
     if ( handSize > 6 ) return;
 
     for( int i = 0; i < handSize; i++ )
         drawCard(painter, QRect( PLAYER_CARD_START_POSITIONS[handSize-2].x()+i*(CARD_SIZE.width()+MARGIN),
                                  PLAYER_CARD_START_POSITIONS[handSize-2].y(),
                                  CARD_SIZE.width(), CARD_SIZE.height() ),
-                Ai::getAllAis()[selectedAiIndex]->getHandCards()[i] );
+                Ai::getAllAis()[Ai::getSelectedAiIndex()]->getHandCards()[i] );
     drawCradSum( painter, ai, QRect( 450, 630, 100, 50) );
     drawPlayerBalance( painter, ai );
 }
@@ -87,7 +87,7 @@ void Widget::drawCradSum(QPainter *painter, Someone *someone, QRect rect )
 void Widget::drawPlayerBalance(QPainter *painter, Ai *ai)
 {
     QBrush brush = QBrush(Qt::SolidPattern);
-    int aiBalance = Ai::getAllAis()[selectedAiIndex]->getBalance();
+    int aiBalance = Ai::getAllAis()[Ai::getSelectedAiIndex()]->getBalance();
     if(aiBalance > 500)
         brush.setColor( Qt::green );
     else if( aiBalance > 200 )
@@ -127,7 +127,7 @@ void Widget::paintEvent(QPaintEvent *event)
 {
     QPainter *painter = new QPainter(this);
     drawDealerHand(painter);
-    drawPlayerHand(painter, Ai::getAllAis()[selectedAiIndex]);
+    drawPlayerHand(painter, Ai::getAllAis()[Ai::getSelectedAiIndex()]);
 }
 
 Widget::~Widget()
@@ -150,20 +150,20 @@ void Widget::setGameButtonStatus(bool status)
 
 void Widget::selectNextAi()
 {
-    if( selectedAiIndex+1 < Ai::getAllAis().length() )
-        selectedAiIndex++;
+    if( Ai::getSelectedAiIndex()+1 < Ai::getAllAis().length() )
+        Ai::setSelectedAiIndex(Ai::getSelectedAiIndex()+1);
     else
-        selectedAiIndex = 0;
-    setGameButtonStatus( !Ai::getAllAis()[selectedAiIndex]->getIsStand() );
+        Ai::setSelectedAiIndex(0);
+    setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() );
     update();
 }
 
 void Widget::selectPreviousAi()
 {
-    if( selectedAiIndex-1 >= 0 )
-        selectedAiIndex--;
+    if( Ai::getSelectedAiIndex()-1 >= 0 )
+        Ai::setSelectedAiIndex(Ai::getSelectedAiIndex()-1);
     else
-        selectedAiIndex = Ai::getAllAis().length()-1;
-    setGameButtonStatus( !Ai::getAllAis()[selectedAiIndex]->getIsStand() );
+        Ai::setSelectedAiIndex(Ai::getAllAis().length()-1);
+    setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() );
     update();
 }

@@ -1,6 +1,7 @@
 #include "ai.h"
 
 QList<Ai*> Ai::allAis = QList<Ai*>();
+int Ai::selectedAiIndex = 0;
 
 int Ai::getBalance() const
 {
@@ -15,6 +16,16 @@ void Ai::setBalance(int value)
 QList<Ai *> Ai::getAllAis()
 {
     return allAis;
+}
+
+int Ai::getSelectedAiIndex()
+{
+    return selectedAiIndex;
+}
+
+void Ai::setSelectedAiIndex(int index)
+{
+    selectedAiIndex = index;
 }
 
 Ai::Ai()

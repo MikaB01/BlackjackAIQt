@@ -90,11 +90,15 @@ Game::Game(QObject *parent)
     fillAiPool( 4 );
     fillCardDeck();
     debugCardDeck();
+
     suffelDeck();
     debugCardDeck();
     firstDeal();
     debugCardDeck();
     Someone::debugAllSomeones();
+
+    if( Ai::getAllAis()[Ai::getSelectedAiIndex()+1]->getIsStand() )
+        qDebug() << "Stand!";
 }
 
 Game::~Game()
