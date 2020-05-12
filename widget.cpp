@@ -173,6 +173,5 @@ void Widget::selectPreviousAi()
         Ai::setSelectedAiIndex(Ai::getSelectedAiIndex()-1);
     else
         Ai::setSelectedAiIndex(Ai::getAllAis().length()-1);
-    //setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() && Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsControlled() );
     update();
 }

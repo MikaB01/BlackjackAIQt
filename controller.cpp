@@ -32,6 +32,7 @@ void Controller::stand()
 {
     Ai::getAllAis()[Ai::getSelectedAiIndex()]->setIsStand( true );
     w->setGameButtonStatus( false );
+    w->selectNextAi();
     w->update();
 }
 
