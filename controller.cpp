@@ -24,20 +24,20 @@ Controller *Controller::get()
 
 void Controller::hitCard()
 {
-    g->dealCardToSomeone( g->getAiPool()[Ai::getSelectedAiIndex()] );
+    g->dealCardToSomeone( Ai::getAllAis()[Ai::getSelectedAiIndex()] );
     w->update();
 }
 
 void Controller::stand()
 {
-    g->getAiPool()[Ai::getSelectedAiIndex()]->setIsStand( true );
+    Ai::getAllAis()[Ai::getSelectedAiIndex()]->setIsStand( true );
     w->setGameButtonStatus( false );
     w->update();
 }
 
 void Controller::controllAi()
 {
-    g->getAiPool()[Ai::getSelectedAiIndex()]->setIsControlled( true );
+    Ai::getAllAis()[Ai::getSelectedAiIndex()]->setIsControlled( true );
     w->setGameButtonStatus( true );
     w->update();
 }

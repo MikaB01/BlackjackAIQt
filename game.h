@@ -16,7 +16,6 @@ class Game : public QObject
     Q_OBJECT
 
 private:
-    QList<Ai*> aiPool;
     QList<Card*> cardDeck;
     Dealer *dealer = new Dealer();
 
@@ -31,8 +30,6 @@ public:
     ~Game();
 
     void debugCardDeck();
-    QList<Ai *> getAiPool() const;
-    void setAiPool(const QList<Ai *> &value);
     Dealer *getDealer() const;
     void setDealer(Dealer *value);
     void dealCardToSomeone( Someone *someone );

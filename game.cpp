@@ -1,15 +1,5 @@
 #include "game.h"
 
-QList<Ai *> Game::getAiPool() const
-{
-    return aiPool;
-}
-
-void Game::setAiPool(const QList<Ai *> &value)
-{
-    aiPool = value;
-}
-
 Dealer *Game::getDealer() const
 {
     return dealer;
@@ -29,7 +19,7 @@ void Game::dealCardToSomeone(Someone *someone)
 void Game::fillAiPool(int amount)
 {
     for(int i = 0; i < amount; i++)
-        aiPool.append( new Ai() );
+        new Ai();
 }
 
 void Game::fillCardDeck()
@@ -83,7 +73,6 @@ Game::Game(QObject *parent)
     srand (time(NULL));
 
     fillAiPool( 4 );
-    aiPool.append( new Ai( true ) );
     fillCardDeck();
     debugCardDeck();
 
