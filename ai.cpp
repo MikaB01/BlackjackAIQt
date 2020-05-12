@@ -28,8 +28,24 @@ void Ai::setSelectedAiIndex(int index)
     selectedAiIndex = index;
 }
 
+bool Ai::getIsControlled() const
+{
+    return isControlled;
+}
+
+void Ai::setIsControlled(bool value)
+{
+    isControlled = value;
+}
+
 Ai::Ai()
 {
+    allAis.append( this );
+}
+
+Ai::Ai(bool isControlled)
+{
+    this->isControlled = isControlled;
     allAis.append( this );
 }
 

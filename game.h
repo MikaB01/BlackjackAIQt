@@ -37,9 +37,6 @@ public:
     void setDealer(Dealer *value);
     void dealCardToSomeone( Someone *someone );
     void dealCardToSomeone( Card *card, Someone *someone );
-
-public slots:
-    void hitCard();
 };
 
 #endif // GAME_H

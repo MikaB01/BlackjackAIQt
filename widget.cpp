@@ -12,6 +12,7 @@ Widget::Widget(QWidget *parent)
     connect( swipeSelectedAiLeft, &QPushButton::clicked, this, &Widget::selectPreviousAi );
     connect( hit, &QPushButton::clicked, this, &Widget::hitPressed );
     connect( stand, &QPushButton::clicked, this, &Widget::standPressed );
+    connect( controllAi, &QPushButton::clicked, this, &Widget::controllAiPressed );
 }
 
 void Widget::drawCard(QPainter *painter, QRect rect, Card *card)
@@ -121,6 +122,11 @@ void Widget::createGameButtons()
     stand = new QPushButton(this);
     stand->setGeometry( 360, 635, 70, 40 );
     stand->setStyleSheet("border-image:url(stand.png);");
+
+    controllAi = new QPushButton(this);
+    controllAi->setGeometry( 570, 635, 70, 40 );
+    controllAi->setStyleSheet("border-image:url(controll.png);");
+    controllAi->setVisible( false );
 }
 
 void Widget::paintEvent(QPaintEvent *event)
@@ -146,6 +152,8 @@ void Widget::setGameButtonStatus(bool status)
 {
     hit->setVisible( status );
     stand->setVisible( status );
+    if( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() ) controllAi->setVisible( !status );
+    else controllAi->setVisible( status );
 }
 
 void Widget::selectNextAi()
@@ -154,7 +162,7 @@ void Widget::selectNextAi()
         Ai::setSelectedAiIndex(Ai::getSelectedAiIndex()+1);
     else
         Ai::setSelectedAiIndex(0);
-    setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() );
+    setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() && Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsControlled() );
     update();
 }
 
@@ -164,6 +172,6 @@ void Widget::selectPreviousAi()
         Ai::setSelectedAiIndex(Ai::getSelectedAiIndex()-1);
     else
         Ai::setSelectedAiIndex(Ai::getAllAis().length()-1);
-    setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() );
+    setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() && Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsControlled() );
     update();
 }

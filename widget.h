@@ -20,6 +20,7 @@ private:
     QPushButton *swipeSelectedAiLeft;
     QPushButton *hit;
     QPushButton *stand;
+    QPushButton *controllAi;
 
     void drawCard( QPainter *painter , QRect rect, Card *card );
     void drawDealerHand( QPainter *painter );
@@ -48,6 +49,7 @@ public slots:
 signals:
     void hitPressed();
     void standPressed();
+    void controllAiPressed();
 };
 
 #endif // WIDGET_H

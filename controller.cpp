@@ -12,6 +12,7 @@ Controller::Controller(QObject *parent)
 
     connect( w, &Widget::hitPressed, this, &Controller::hitCard );
     connect( w, &Widget::standPressed, this, &Controller::stand );
+    connect( w, &Widget::controllAiPressed, this, &Controller::controllAi );
 }
 
 Controller *Controller::get()
@@ -31,5 +32,12 @@ void Controller::stand()
 {
     g->getAiPool()[Ai::getSelectedAiIndex()]->setIsStand( true );
     w->setGameButtonStatus( false );
+    w->update();
+}
+
+void Controller::controllAi()
+{
+    g->getAiPool()[Ai::getSelectedAiIndex()]->setIsControlled( true );
+    w->setGameButtonStatus( true );
     w->update();
 }

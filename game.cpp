@@ -70,11 +70,6 @@ void Game::dealCardToSomeone(Card *card, Someone *someone)
     cardDeck.removeAt( cardDeck.indexOf( card ) );
 }
 
-void Game::hitCard()
-{
-
-}
-
 void Game::debugCardDeck()
 {
     qDebug() << "---Debug-CardDeck--- (" << cardDeck.length() << ")";
@@ -88,6 +83,7 @@ Game::Game(QObject *parent)
     srand (time(NULL));
 
     fillAiPool( 4 );
+    aiPool.append( new Ai( true ) );
     fillCardDeck();
     debugCardDeck();
 
