@@ -10,8 +10,8 @@ class Controller : public QObject
 {
 private:
     static Controller *controller;
-    Widget *w;
     Game   *g;
+    Widget *w;
     Controller( QObject *parent = 0 );
 
 public:

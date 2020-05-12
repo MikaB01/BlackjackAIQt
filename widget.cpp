@@ -60,6 +60,8 @@ void Widget::drawPlayerHand(QPainter *painter, Ai *ai)
                 Ai::getAllAis()[Ai::getSelectedAiIndex()]->getHandCards()[i] );
     drawCradSum( painter, ai, QRect( 450, 630, 100, 50) );
     drawPlayerBalance( painter, ai );
+
+    setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() && Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsControlled() );
 }
 
 void Widget::drawCardSymbole(QPainter *painter, QRect rect, Card *card )
@@ -162,7 +164,6 @@ void Widget::selectNextAi()
         Ai::setSelectedAiIndex(Ai::getSelectedAiIndex()+1);
     else
         Ai::setSelectedAiIndex(0);
-    setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() && Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsControlled() );
     update();
 }
 
@@ -172,6 +173,6 @@ void Widget::selectPreviousAi()
         Ai::setSelectedAiIndex(Ai::getSelectedAiIndex()-1);
     else
         Ai::setSelectedAiIndex(Ai::getAllAis().length()-1);
-    setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() && Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsControlled() );
+    //setGameButtonStatus( !Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsStand() && Ai::getAllAis()[Ai::getSelectedAiIndex()]->getIsControlled() );
     update();
 }
